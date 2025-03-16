@@ -1,0 +1,7 @@
+*.env
+*output.wav
+*.toml
+*.json
+*.mp4
+*.lock
+*.log
