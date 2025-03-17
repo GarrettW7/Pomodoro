@@ -22,7 +22,14 @@ def getSong(message):
                 "role": "system",
                 # "content": "You give the most correct answer possible. Reguardless of the question, you will always give the most correct answer."
                 # "content" : "You will make fun of anything that i say and then make a haiku to finish your thoughts."
-                "content": "You will only respond with a URL to a youtube video that plays music. I will ask for a genre and you will ONLY respond with the URL of a video of that genre, no greetings or other text."
+                "content": """
+                You are an AI that finds music for me. I only want music from current YouTube videos. 
+
+                You will only respond with a **valid** and **non-meme** URL to a YouTube video that plays music. 
+
+                ❌ Do NOT return links to Rick Astley, meme music, or joke videos.  
+                ✅ Only return links to **real** music videos from diverse genres.
+                """
             },
             # Set a user message for the assistant to respond to.
             {
