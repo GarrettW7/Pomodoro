@@ -7,17 +7,6 @@ def start_timer(minutes, callback):
     time.sleep(seconds)
     callback()
 
-def endTimer(intervalTime):
-    time.sleep(intervalTime)
-    return True
-
-
-def timerDing(interval_minutes=1):
-    while True:
-        # print("Starting timer... ")
-        ding()
-        time.sleep(interval_minutes * 60)  # Convert minutes to seconds
-
 def oneFifth():
     print(f"Current time is: {time.strftime('%H:%M:%S')} One fifth of the way there!")
 
@@ -33,15 +22,14 @@ def fourFiths():
 def fiveFiths():
     print(f"Current time is: {time.strftime('%H:%M:%S')} You are done! Time to take a break!")
     ding()
-    pauseMusic()
+
     
 def oneFifthBreak(oneFifthTime):
     start_timer(oneFifthTime, fiveFiths)
 
 
 def breakTime():
-    print(f"Current time is: {time.strftime('%H:%M:%S')} \nBreak is OVER! Time to get back to work!")
-    # resumeMusic()
+    print(f"Current time is: {time.strftime('%H:%M:%S')} --- Break is OVER! Time to get back to work!\n")
     ding()
 
 

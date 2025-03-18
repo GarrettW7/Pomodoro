@@ -47,6 +47,9 @@ import signal
 def ding():
     subprocess.run(["ffplay", "-nodisp", "-autoexit", "ding.wav"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+def cheering():
+    subprocess.run(["ffplay", "-nodisp", "-autoexit", "cheering.wav"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 def playMusic2():
     """Starts playing music using ffplay in the background."""
     global intermission_process

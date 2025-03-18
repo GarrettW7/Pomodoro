@@ -1,8 +1,8 @@
 import time
-from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic
+from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic, cheering
 from timer import pomodoroTimer
 import threading
-from AIsongFinder import get_song, search_youtube
+from AIsongFinder import search_youtube
 
 def definePomodoro():
     print()
@@ -24,7 +24,8 @@ def definePomodoro():
             print("Getting new music with AI help.")
             print("Please enter the genre of music you would like to listen to. \n" )
             genre = input()
-            tempURLs = search_youtube(genre)
+            print()
+            tempURLs = search_youtube(genre, (int(workTime) * numSessions))
             download_audio(tempURLs, numSessions)
             print("Music downloaded!\n-----------------------\n")
         elif response == "3":
@@ -38,16 +39,15 @@ def definePomodoro():
         tempFlag = True 
         sessionsPassed = 0
         while numSessions > sessionsPassed:
-            print(f"Starting Pomodoro session {sessionsPassed + 1}!")
-            print(f"Your are on session {sessionsPassed + 1} out of {numSessions}!")
+            print(f"Starting session number {sessionsPassed + 1} out of {numSessions}!")
             if tempFlag:
                 musicThread = startPomodoro(int(workTime))
                 tempFlag = False
             else:
                 resumePomodoro(int(workTime), musicThread)
-            # numSessions -= 1
             sessionsPassed += 1
         stopMusic1()
+        cheering()
         print("All Pomodoro sessions completed!")
     else:
         print("Maybe next time!")
