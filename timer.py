@@ -19,8 +19,9 @@ def threeFiths():
 def fourFiths():
     print(f"Current time is: {time.strftime('%H:%M:%S')} Four fifths of the way there!")
 
-def fiveFiths():
+def fiveFiths(oneFifthTime):
     print(f"Current time is: {time.strftime('%H:%M:%S')} You are done! Time to take a break!")
+    print(f"Your break will end at {time.strftime('%H:%M:%S', time.localtime(time.time() + oneFifthTime * 60))}")
     ding()
 
     
@@ -30,6 +31,7 @@ def oneFifthBreak(oneFifthTime):
 
 def breakTime():
     print(f"Current time is: {time.strftime('%H:%M:%S')} --- Break is OVER! Time to get back to work!\n")
+    resumeMusic()
     ding()
 
 
@@ -41,7 +43,7 @@ def pomodoroTimer(totalTime):
     start_timer(oneFifthTime, twoFiths)
     start_timer(oneFifthTime, threeFiths)
     start_timer(oneFifthTime, fourFiths)
-    start_timer(oneFifthTime, fiveFiths)
+    start_timer(oneFifthTime, fiveFiths(oneFifthTime=oneFifthTime))
     pauseMusic()
 
     """
