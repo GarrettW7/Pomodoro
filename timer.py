@@ -1,5 +1,6 @@
 import time
-from playMusic import ding, pauseMusic, resumeMusic
+import threading
+from playMusic import ding, pauseMusic, resumeMusic, playMusic2, stopMusic2
 
 def start_timer(minutes, callback):
     seconds = minutes * 60
@@ -34,11 +35,13 @@ def fiveFiths():
     ding()
     pauseMusic()
     
+def oneFifthBreak(oneFifthTime):
+    start_timer(oneFifthTime, fiveFiths)
 
 
 def breakTime():
     print(f"Current time is: {time.strftime('%H:%M:%S')} \nBreak is OVER! Time to get back to work!")
-    resumeMusic()
+    # resumeMusic()
     ding()
 
 
@@ -51,6 +54,21 @@ def pomodoroTimer(totalTime):
     start_timer(oneFifthTime, threeFiths)
     start_timer(oneFifthTime, fourFiths)
     start_timer(oneFifthTime, fiveFiths)
+    pauseMusic()
+
+    """
+    This ideally would play the intermission music for the duration of the break
+
+    timer_thread = threading.Thread(target=oneFifthBreak, args=(oneFifthTime), daemon=True)
+    intermission_music_thread = threading.Thread(target=playMusic2, daemon=True)
+    timer_thread.start()
+    intermission_music_thread.start()
+
+    timer_thread.join()  # Wait for the timer thread to finish
+    stopMusic2()
+    intermission_music_thread.join() "
+    """
+
     start_timer(oneFifthTime, breakTime)
 
 

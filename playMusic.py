@@ -1,7 +1,13 @@
 import yt_dlp
 
 
-def download_video(url, output_path="video.mp4"):
+def download_video(url, numSessions, output_path="video.mp4"):
+    # for i in range(numSessions):
+    #     ydl_opts = {
+    #         'outtmpl': f"{output_path}{i}" ,  # Save as "video.mp4"
+    #         'format': 'bestvideo+bestaudio/best',  # Best quality video + audio
+    #         'merge_output_format': 'mp4',  # Ensure MP4 format
+    #     }
     ydl_opts = {
         'outtmpl': output_path,  # Save as "video.mp4"
         'format': 'bestvideo+bestaudio/best',  # Best quality video + audio
@@ -10,7 +16,13 @@ def download_video(url, output_path="video.mp4"):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-def download_audio(url, output_path="audio"):
+def download_audio(url, numSessions, output_path="audio"):
+    # for i in range(numSessions):
+    #     ydl_opts = {
+    #         'outtmpl': f"{output_path}{i}" ,  # Save as "video.mp4"
+    #         'format': 'bestvideo+bestaudio/best',  # Best quality video + audio
+    #         'merge_output_format': 'mp4',  # Ensure MP4 format
+    #     }
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': output_path,
@@ -35,8 +47,27 @@ import signal
 def ding():
     subprocess.run(["ffplay", "-nodisp", "-autoexit", "ding.wav"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-# Global variable to store the music process
+def playMusic2():
+    """Starts playing music using ffplay in the background."""
+    global intermission_process
+    if intermission_process is None:  # Prevent multiple music instances
+        intermission_process = subprocess.Popen(
+            ["ffplay", "-nodisp", "-autoexit", "intermission.wav"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+
+def stopMusic2():
+    """Stops the music process if it's running."""
+    global intermission_process
+    if intermission_process:
+        intermission_process.terminate()  # Kill the process
+        intermission_process = None
+
+
+# Global variables to store the music process
 music_process = None
+intermission_process = None
 
 
 def playMusic1():
