@@ -23,6 +23,7 @@ def fiveFiths(oneFifthTime):
     print(f"Current time is: {time.strftime('%H:%M:%S')} You are done! Time to take a break!")
     print(f"Your break will end at {time.strftime('%H:%M:%S', time.localtime(time.time() + oneFifthTime * 60))}")
     ding()
+    pauseMusic()
 
     
 def oneFifthBreak(oneFifthTime):
@@ -43,8 +44,8 @@ def pomodoroTimer(totalTime):
     start_timer(oneFifthTime, twoFiths)
     start_timer(oneFifthTime, threeFiths)
     start_timer(oneFifthTime, fourFiths)
-    start_timer(oneFifthTime, fiveFiths(oneFifthTime=oneFifthTime))
-    pauseMusic()
+    start_timer(oneFifthTime, lambda: fiveFiths(oneFifthTime=oneFifthTime))
+    # pauseMusic()
 
     """
     This ideally would play the intermission music for the duration of the break
