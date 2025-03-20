@@ -1,15 +1,12 @@
 import os
 from googleapiclient.discovery import build
-from groq import Groq
 from dotenv import load_dotenv
 import isodate
-
 
 # Load environment variables from .env file
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
-client = Groq(api_key=os.getenv('GROQ_API_KEY'))
 
 
 
@@ -46,19 +43,3 @@ def search_youtube(genre, min_duration=0):
             return f"https://www.youtube.com/watch?v={video['id']}"
 
     return "No videos found with the required minimum length."
-
-# def get_song(genre):
-#     """Ask Groq for a refined genre and fetch a fresh YouTube video."""
-#     chat_completion = client.chat.completions.create(
-#         messages=[
-#             {"role": "system", "content": "Refine the music genre for a better YouTube search."},
-#             {"role": "user", "content": genre}
-#         ],
-#         model="mixtral-8x7b-32768",
-#         temperature=0.7,
-#         max_completion_tokens=50
-#     )
-
-#     suggested_genre = chat_completion.choices[0].message.content.strip()
-    
-#     return search_youtube(suggested_genre)

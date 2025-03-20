@@ -1,5 +1,5 @@
 import time
-from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic, cheering
+from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic, cheering, playMusic1
 from timer import pomodoroTimer
 import threading
 from AIsongFinder import search_youtube
@@ -44,6 +44,7 @@ def definePomodoro():
                 musicThread = startPomodoro(int(workTime))
                 tempFlag = False
             else:
+                resumeMusic()
                 resumePomodoro(int(workTime), musicThread)
             sessionsPassed += 1
         stopMusic1()
@@ -75,7 +76,10 @@ def startPomodoro(workTime):
     return music_thread
 
 def resumePomodoro(workTime, musicThread):
-    resumeMusic()
+    # onGoingMusicThread = musicThread
+    # onGoingMusicThread.join()
+    # resumeMusic()
+    playMusic1()
     breakTime = workTime / 5
     print()
     print('----------------------------')

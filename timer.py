@@ -1,6 +1,6 @@
 import time
 import threading
-from playMusic import ding, pauseMusic, resumeMusic, playMusic2, stopMusic2
+from playMusic import ding, pauseMusic, resumeMusic, playMusic1, stopMusic2
 
 def start_timer(minutes, callback):
     seconds = minutes * 60
@@ -31,8 +31,8 @@ def oneFifthBreak(oneFifthTime):
 
 
 def breakTime():
+    playMusic1()
     print(f"Current time is: {time.strftime('%H:%M:%S')} --- Break is OVER! Time to get back to work!\n")
-    resumeMusic()
     ding()
 
 

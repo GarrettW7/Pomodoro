@@ -82,6 +82,8 @@ def playMusic1():
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
+    else:
+        resumeMusic()
 
 def pauseMusic():
     """Pauses the currently playing music."""
