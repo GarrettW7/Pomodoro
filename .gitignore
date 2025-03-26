@@ -6,3 +6,5 @@
 *.lock
 *.log
 *.wav
+websitePomodoro/
+flaskServer.py

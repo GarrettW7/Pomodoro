@@ -101,6 +101,5 @@ def resumePomodoro(workTime, musicThread):
 
     print("Pomodoro session completed. Taking a break now.")
 
-
 definePomodoro()
 
