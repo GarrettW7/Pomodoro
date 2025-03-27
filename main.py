@@ -76,9 +76,6 @@ def startPomodoro(workTime):
     return music_thread
 
 def resumePomodoro(workTime, musicThread):
-    # onGoingMusicThread = musicThread
-    # onGoingMusicThread.join()
-    # resumeMusic()
     playMusic1()
     breakTime = workTime / 5
     print()
