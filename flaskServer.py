@@ -1,6 +1,8 @@
 import flask
 from flask import request, jsonify
 from flask_cors import CORS
+import os
+import signal
 # -------------- Imports from main.py --------------
 import time
 from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic, cheering, playMusic1,ding
@@ -44,8 +46,17 @@ def handle_tasks():
 
 sessionLength = 0
 numSessions = 0
-musicType = "Stop messing with me"
+musicType = "Whatchu doing here"
 dataCompiled = [sessionLength, numSessions, musicType]
+
+@app.route("/shutdown", methods=["POST"])
+def shutdown():
+    print("Stopping music...")
+    stopMusic1()
+    
+    # if request.method == "POST":
+    #     os.kill(os.getpid(), signal.SIGINT)  # Terminates the Flask process
+    return "Stopped music!", 200
 
 @app.route('/processData', methods=['GET'])
 def getData():
@@ -72,6 +83,8 @@ def processData():
         tempURLs = search_youtube(musicType, (sessionLength * numSessions))
         download_audio(tempURLs, numSessions)
         print("Music downloaded!\n-----------------------\n")
+
+
         tempFlag = True 
         sessionsPassed = 0
         while numSessions > sessionsPassed:

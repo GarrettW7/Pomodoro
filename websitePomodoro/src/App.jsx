@@ -19,6 +19,10 @@ function App() {
   const [showLoadingWords, setShowLoadingWords] = useState(false);
 
 
+  window.addEventListener("beforeunload", () => {
+    navigator.sendBeacon("http://127.0.0.1:5000/shutdown");
+    console.log("Sent beacon");
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,23 +44,27 @@ function App() {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  const addTask = () => {
-    if (!newTask.trim()) return;
+  // const addTask = () => {
+  //   if (!newTask.trim()) return;
 
-    fetch("http://127.0.0.1:5000/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task: newTask }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Server response:", data);
-        setData(data); // Update state with new task list
-        setNewTask(""); // Clear input field
-      })
-      .catch((err) => console.error("Error adding task:", err));
-  };
+  //   fetch("http://127.0.0.1:5000/tasks", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ task: newTask }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("Server response:", data);
+  //       setData(data); // Update state with new task list
+  //       setNewTask(""); // Clear input field
+  //     })
+  //     .catch((err) => console.error("Error adding task:", err));
+  // };
 
+  const killMusic = () => {
+    navigator.sendBeacon("http://127.0.0.1:5000/shutdown")
+    console.log("Killing music!");
+  }
 
 
   const updateData = () => {
@@ -83,6 +91,8 @@ function App() {
 
       <div>
         <p className='currentTime'>Current Time: {currentTime}</p>
+        <button className='killButton' onClick={killMusic}>Stop Music</button>
+
         {showLoading == false ? (
           <div>
             <h1>Welcome to the Pomodoro Module!</h1>
