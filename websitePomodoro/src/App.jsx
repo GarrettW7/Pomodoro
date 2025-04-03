@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState(null); // Change initial state to null
-  const [newTask, setNewTask] = useState("");
 
+  //For the pomodoro session
   const [dataCompiled, setDataCompiled] = useState([]);
   const [sessionLength, setSessionLength] = useState(2);
   const [numSessions, setNumSessions] = useState(2);
@@ -12,12 +11,14 @@ function App() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
   const [startTime, setStartTime] = useState(new Date().toLocaleTimeString());
 
-
-
+  
+  //For the loading screen
   const [showInput, setShowInput] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [showLoadingWords, setShowLoadingWords] = useState(false);
-
+  
+  //For the timer
+  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
 
   window.addEventListener("beforeunload", () => {
     navigator.sendBeacon("http://127.0.0.1:5000/shutdown");
@@ -44,23 +45,6 @@ function App() {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  // const addTask = () => {
-  //   if (!newTask.trim()) return;
-
-  //   fetch("http://127.0.0.1:5000/tasks", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ task: newTask }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log("Server response:", data);
-  //       setData(data); // Update state with new task list
-  //       setNewTask(""); // Clear input field
-  //     })
-  //     .catch((err) => console.error("Error adding task:", err));
-  // };
-
   const killMusic = () => {
     navigator.sendBeacon("http://127.0.0.1:5000/shutdown")
     console.log("Killing music!");
@@ -83,12 +67,26 @@ function App() {
       })
       .catch((err) => console.error("Error adding task:", err));
       setShowLoadingWords(true);
+      setTimeLeft(sessionLength * 60); // Reset timer to session length in seconds
   };
+
+
+  //The timer
+  {
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+}
 
   return (
     <div>
-
-
+      
       <div>
         <p className='currentTime'>Current Time: {currentTime}</p>
         <button className='killButton' onClick={killMusic}>Stop Music</button>
@@ -115,6 +113,11 @@ function App() {
               <div>
                 {/* {setStartTime(new Date().toLocaleTimeString())} */}
                 <p>Starting a {sessionLength} minute Pomodoro session at {startTime}</p>
+                
+                <div className="flex flex-col items-center justify-center p-4">
+                  <h1 className="text-2xl font-bold">Countdown Timer</h1>
+                  <p className="text-xl mt-2">{formatTime(timeLeft)}</p>
+                </div>
                 <p>The next break will be at {new Date(startTime + sessionLength * 60).toLocaleTimeString()} and will last {sessionLength/5} minutes.</p>
               </div>
             </div>
@@ -146,7 +149,8 @@ function App() {
               />
             </div>
             <div>
-              <label htmlFor="musicType">What type of music do you want to listen to? </label>
+              <label htmlFor="musicType">What type of music do you want to listen to? 
+                Type "000" if you want to reuse music </label>
               <input
                 type="text"
                 id="musicType"

@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask_cors import CORS
 import os
 import signal
+import atexit
 # -------------- Imports from main.py --------------
 import time
 from playMusic import download_audio, startPomodoroSound, stopMusic1, resumeMusic, pauseMusic, cheering, playMusic1,ding
@@ -41,6 +42,13 @@ def handle_tasks():
     # Handle GET request (return tasks)
     return jsonify({"tasks": tasks})
 
+def onShutdown():
+    print("\n\nEdits detected, shutting down the server...\n")
+    print("Stopping music...\n\n")
+    stopMusic1()
+    # os.kill(os.getpid(), signal.SIGINT)  # Terminates the Flask process
+atexit.register(onShutdown)
+# Register the shutdown function to be called on exit
 
 #---- Testing -----
 
@@ -76,26 +84,39 @@ def processData():
         numSessions = int(dataUpdated[1])
         musicType = dataUpdated[2]
 
+        if musicType == "000":
+            musicType = "Recycling music"
+
         print(f"Session Length: {sessionLength}")
         print(f"Number of Sessions: {numSessions}")
         print(f"Music Type: {musicType}")
 
-        tempURLs = search_youtube(musicType, (sessionLength * numSessions))
-        download_audio(tempURLs, numSessions)
-        print("Music downloaded!\n-----------------------\n")
+        if musicType != "Recycling music":
+            tempURLs = search_youtube(musicType, (sessionLength * numSessions))
+            download_audio(tempURLs, numSessions)
+            print("Music downloaded!\n-----------------------\n")
 
 
         tempFlag = True 
         sessionsPassed = 0
         while numSessions > sessionsPassed:
             print(f"Starting session number {sessionsPassed + 1} out of {numSessions}!")
-            if tempFlag:
-                musicThread = startPomodoro(int(sessionLength))
-                tempFlag = False
-            else:
-                resumeMusic()
-                resumePomodoro(int(sessionLength), musicThread)
-            sessionsPassed += 1
+            for i in range(1, 6):
+                timer_thread = threading.Thread(target=pomodoroTimer, args=(sessionLength,), daemon=True)
+                music_thread = threading.Thread(target=startPomodoroSound, daemon=True)
+                timer_thread.start()
+                music_thread.start()
+
+                timer_thread.join()  # Wait for the timer thread to finish
+            pauseMusic()
+            music_thread.join()  # Wait for the music thread to finish
+            # if tempFlag:
+            #     musicThread = startPomodoro(int(sessionLength))
+            #     tempFlag = False
+            # else:
+            #     resumeMusic()
+            #     resumePomodoro(int(sessionLength), musicThread)
+            # sessionsPassed += 1
         stopMusic1()
         cheering()
         print("All Pomodoro sessions completed!")
