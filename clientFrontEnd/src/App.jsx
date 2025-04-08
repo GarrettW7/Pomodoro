@@ -33,17 +33,6 @@ function App() {
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
-  useEffect(() => {
-    console.log("Fetching data...");
-
-    fetch("http://127.0.0.1:5000/tasks")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log("Fetched data:", data);
-      })
-      .catch((err) => console.error("Fetch error:", err));
-  }, []);
 
   const killMusic = () => {
     navigator.sendBeacon("http://127.0.0.1:5000/shutdown")
@@ -86,7 +75,7 @@ function App() {
 
   return (
     <div>
-      
+
       <div>
         <p className='currentTime'>Current Time: {currentTime}</p>
         <button className='killButton' onClick={killMusic}>Stop Music</button>
@@ -114,10 +103,6 @@ function App() {
                 {/* {setStartTime(new Date().toLocaleTimeString())} */}
                 <p>Starting a {sessionLength} minute Pomodoro session at {startTime}</p>
                 
-                <div className="flex flex-col items-center justify-center p-4">
-                  <h1 className="text-2xl font-bold">Countdown Timer</h1>
-                  <p className="text-xl mt-2">{formatTime(timeLeft)}</p>
-                </div>
                 <p>The next break will be at {new Date(startTime + sessionLength * 60).toLocaleTimeString()} and will last {sessionLength/5} minutes.</p>
               </div>
             </div>
